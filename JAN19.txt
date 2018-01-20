@@ -1,3 +1,3 @@
-name hr      ohr   pto     lpto   deff    hsa     loan
-bill 0010.00 00.00 012.00  020.00 0000.00 0000.00 0000.00
+name hr      ohr   pto     lpto   other   hsa     loan
+bill 0010.00 00.00 012.00  020.00 0012.50 0000.00 0000.00
 camm 0030.25 02.14 003.00  012.00 0000.00 0000.00 0000.00
