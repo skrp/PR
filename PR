@@ -1,4 +1,3 @@
-#!/usr/local/bin/perl
 use strict; use warnings;
 use Data::Dumper;
 ###############################################
@@ -26,12 +25,24 @@ my ($file) = @ARGV;
 die "ARG1 file" if (!defined $file);
 
 my $pr = $file; $pr =~ s/\..*//;
-my %annual{$pr};
+my %annual;
 
 open(my $fh, '<', $file) or die "FAIL open $file";
 
 my @input = readline $fh;
 close $fh; chomp @input;
+
+for (@input)
+{
+  my @data = split / /, $_;
+  $annual{$pr}{$data[0]}{$ifield[1]} = $data[1]; # hr
+  $annual{$pr}{$data[0]}{$ifield[2]} = $data[2]; # ohr
+  $annual{$pr}{$data[0]}{$ifield[3]} = $data[3]; # pto
+  $annual{$pr}{$data[0]}{$ifield[4]} = $data[4]; # lpto
+  $annual{$pr}{$data[0]}{$ifield[5]} = $data[5]; # hsa
+  $annual{$pr}{$data[0]}{$ifield[6]} = $data[6]; # def
+  $annual{$pr}{$data[0]}{$ifield[7]} = $data[7]; # loan
+}
 # MASTER #####################################
 my @mfield = qw(name ssn x m salary r_hr r_ohr r_d deff r_med r_dent r_loan);
 
@@ -58,7 +69,7 @@ for (@master)
 }
 
 # YTD #########################################
-my @yfields = qw(name t_gross t_net t_hr t_ohr t_fit t_sit t_ss t_med t_admed t_deff t_med t_loan t_dent);
+my @yfield = qw(name t_gross t_net t_hr t_ohr t_fit t_sit t_ss t_med t_admed t_deff t_med t_dent t_loan);
 
 open(my $Yfh, '<', '2018.txt');
 # year totals
@@ -68,13 +79,29 @@ close $Yfh; chomp @ytd;
 
 for (@ytd)
 {
-
+  my @data = split / /, $_;
+  $annual{$pr}{$data[0]}{$yfield[1]} = $data[1]; # t_gross
+  $annual{$pr}{$data[0]}{$yfield[2]} = $data[2]; # t_net
+  $annual{$pr}{$data[0]}{$yfield[3]} = $data[3]; # t_hr
+  $annual{$pr}{$data[0]}{$yfield[4]} = $data[4]; # t_ohr
+  $annual{$pr}{$data[0]}{$yfield[5]} = $data[5]; # t_fit
+  $annual{$pr}{$data[0]}{$yfield[6]} = $data[6]; # t_sit
+  $annual{$pr}{$data[0]}{$yfield[7]} = $data[7]; # t_ss
+  $annual{$pr}{$data[0]}{$yfield[8]} = $data[8]; # t_med
+  $annual{$pr}{$data[0]}{$yfield[9]} = $data[9]; # t_admed
+  $annual{$pr}{$data[0]}{$yfield[10]} = $data[10]; # t_deff
+  $annual{$pr}{$data[0]}{$yfield[11]} = $data[11]; # t_med
+  $annual{$pr}{$data[0]}{$yfield[12]} = $data[12]; # t_dent
+  $annual{$pr}{$data[0]}{$yfield[13]} = $data[13]; # t_loan
 }
 
 # SAVE YTD ####################################
 my @time = localtime(time);
-my $time = "$time[5]_$time[4]_$time[3]_$time[2]_$time[1]";
-open(my $Sfh, '>', $time);
+my $y = $time[5]+1900; my $m = $time[4]+1;
+my $time = $y.'_'.$m."_$time[3]_$time[2]_$time[1]";
+open(my $Sfh, '>', "$time.txt");
 
+print "$time\n";
+print Dumper(%annual);
 ###############################################
 ###############################################
