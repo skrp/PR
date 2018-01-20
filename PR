@@ -1,0 +1,80 @@
+#!/usr/local/bin/perl
+use strict; use warnings;
+use Data::Dumper;
+###############################################
+# PR - all in one payroll machine
+
+# INPUT STRUCT ################################
+# payroll_name = filename
+# employee hrs ohrs pto lpto loan hsa deff
+
+# PDF OUTPUT ##################################
+# payroll-stubbs
+# payroll-reports
+# tax-quarterlies
+# accountant-entries
+
+# INTERNAL STRUCT #############################
+# hash-of-hashes
+# $obj = employee or array
+# %2018{Jan_19}{$obj}{$slot}
+
+# INPUT #######################################
+my @ifield = qw(name hr ohr pto lpto hsa def loan);
+
+my ($file) = @ARGV;
+die "ARG1 file" if (!defined $file);
+
+my $pr = $file; $pr =~ s/\..*//;
+my %annual{$pr};
+
+open(my $fh, '<', $file) or die "FAIL open $file";
+
+my @input = readline $fh;
+close $fh; chomp @input;
+# MASTER #####################################
+my @mfield = qw(name ssn x m salary r_hr r_ohr r_d deff r_med r_dent r_loan);
+
+open(my $Mfh, '<', 'MASTER.txt');
+# field delimited aggregate data
+
+my @master = readline $Mfh;
+close $Mfh; chomp @master;
+
+for (@master)
+{
+  my @data = split / /, $_;
+#              name       variable     data
+  $annual{$pr}{$data[0]}{$mfield[1]} = $data[1]; # ssn
+  $annual{$pr}{$data[0]}{$mfield[2]} = $data[2]; # exemp
+  $annual{$pr}{$data[0]}{$mfield[3]} = $data[3]; # marr
+  $annual{$pr}{$data[0]}{$mfield[4]} = $data[4]; # salary
+  $annual{$pr}{$data[0]}{$mfield[5]} = $data[5]; # r_hr
+  $annual{$pr}{$data[0]}{$mfield[6]} = $data[6]; # r_ohr
+  $annual{$pr}{$data[0]}{$mfield[7]} = $data[7]; # r_deff
+  $annual{$pr}{$data[0]}{$mfield[8]} = $data[8]; # r_med
+  $annual{$pr}{$data[0]}{$mfield[9]} = $data[9]; # r_loan
+  $annual{$pr}{$data[0]}{$mfield[10]} = $data[10]; # r_dent
+}
+
+# YTD #########################################
+my @yfields = qw(name t_gross t_net t_hr t_ohr t_fit t_sit t_ss t_med t_admed t_deff t_med t_loan t_dent);
+
+open(my $Yfh, '<', '2018.txt');
+# year totals
+
+my @ytd = readline $Yfh;
+close $Yfh; chomp @ytd;
+
+for (@ytd)
+{
+
+}
+
+# SAVE YTD ####################################
+my @time = localtime(time);
+my $time = "$time[5]_$time[4]_$time[3]_$time[2]_$time[1]";
+open(my $Sfh, '>', $time);
+
+###############################################
+###############################################
