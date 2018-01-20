@@ -31,17 +31,12 @@ open(my $fh, '<', $file) or die "FAIL open $file";
 
 my @input = readline $fh;
 close $fh; chomp @input;
+shift @input;
 
 for (@input)
 {
   my @data = split / /, $_;
-  $annual{$pr}{$data[0]}{$ifield[1]} = $data[1]; # hr
-  $annual{$pr}{$data[0]}{$ifield[2]} = $data[2]; # ohr
-  $annual{$pr}{$data[0]}{$ifield[3]} = $data[3]; # pto
-  $annual{$pr}{$data[0]}{$ifield[4]} = $data[4]; # lpto
-  $annual{$pr}{$data[0]}{$ifield[5]} = $data[5]; # hsa
-  $annual{$pr}{$data[0]}{$ifield[6]} = $data[6]; # def
-  $annual{$pr}{$data[0]}{$ifield[7]} = $data[7]; # loan
+  fill(\@ifield, \@data);
 }
 # MASTER #####################################
 my @mfield = qw(name ssn x m salary r_hr r_ohr r_d deff r_med r_dent r_loan);
@@ -51,48 +46,27 @@ open(my $Mfh, '<', 'MASTER.txt');
 
 my @master = readline $Mfh;
 close $Mfh; chomp @master;
+shift @master;
 
 for (@master)
 {
   my @data = split / /, $_;
-#              name       variable     data
-  $annual{$pr}{$data[0]}{$mfield[1]} = $data[1]; # ssn
-  $annual{$pr}{$data[0]}{$mfield[2]} = $data[2]; # exemp
-  $annual{$pr}{$data[0]}{$mfield[3]} = $data[3]; # marr
-  $annual{$pr}{$data[0]}{$mfield[4]} = $data[4]; # salary
-  $annual{$pr}{$data[0]}{$mfield[5]} = $data[5]; # r_hr
-  $annual{$pr}{$data[0]}{$mfield[6]} = $data[6]; # r_ohr
-  $annual{$pr}{$data[0]}{$mfield[7]} = $data[7]; # r_deff
-  $annual{$pr}{$data[0]}{$mfield[8]} = $data[8]; # r_med
-  $annual{$pr}{$data[0]}{$mfield[9]} = $data[9]; # r_loan
-  $annual{$pr}{$data[0]}{$mfield[10]} = $data[10]; # r_dent
+  fill(\@mfield, \@data);
 }
 
 # YTD #########################################
 my @yfield = qw(name t_gross t_net t_hr t_ohr t_fit t_sit t_ss t_med t_admed t_deff t_med t_dent t_loan);
-
 open(my $Yfh, '<', '2018.txt');
 # year totals
 
 my @ytd = readline $Yfh;
 close $Yfh; chomp @ytd;
+shift @ytd;
 
 for (@ytd)
 {
   my @data = split / /, $_;
-  $annual{$pr}{$data[0]}{$yfield[1]} = $data[1]; # t_gross
-  $annual{$pr}{$data[0]}{$yfield[2]} = $data[2]; # t_net
-  $annual{$pr}{$data[0]}{$yfield[3]} = $data[3]; # t_hr
-  $annual{$pr}{$data[0]}{$yfield[4]} = $data[4]; # t_ohr
-  $annual{$pr}{$data[0]}{$yfield[5]} = $data[5]; # t_fit
-  $annual{$pr}{$data[0]}{$yfield[6]} = $data[6]; # t_sit
-  $annual{$pr}{$data[0]}{$yfield[7]} = $data[7]; # t_ss
-  $annual{$pr}{$data[0]}{$yfield[8]} = $data[8]; # t_med
-  $annual{$pr}{$data[0]}{$yfield[9]} = $data[9]; # t_admed
-  $annual{$pr}{$data[0]}{$yfield[10]} = $data[10]; # t_deff
-  $annual{$pr}{$data[0]}{$yfield[11]} = $data[11]; # t_med
-  $annual{$pr}{$data[0]}{$yfield[12]} = $data[12]; # t_dent
-  $annual{$pr}{$data[0]}{$yfield[13]} = $data[13]; # t_loan
+  fill(\@yfield, \@data);
 }
 ###############################################
 ###############################################
@@ -100,6 +74,19 @@ for (@ytd)
 print Dumper(%annual);
 ###############################################
 ###############################################
+sub fill
+{
+  my ($field, $data) = @_;
+  my @field = @{$field}; my @data = @{$data};
+
+  my $max = @field; $max--; my $i = 1;
+
+  while ($i <= $max)
+  {
+    $annual{$pr}{$data[0]}{$field[$i]} = $data[$i];
+    $i++;
+  }
+}
 sub save
 {
   my @time = localtime(time);
