@@ -18,6 +18,9 @@ use Data::Dumper;
 # $obj = employee or array
 # %2018{Jan_19}{$obj}{$slot}
 
+# ADD EMPLOYEE ################################
+# append the MASTER.txt with all data of new employee
+
 # INPUT #######################################
 my @ifield = qw(name hr ohr pto lpto hsa def loan);
 
