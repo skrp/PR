@@ -12,8 +12,8 @@ This machine will:
   produce custom reports
 # FILES #########################
 PR - core payroll processor
+REPORT - report ytd or specific pay-period
 MASTER - employee information
 JAN19 - payroll data
 2018 - ytd data
-#################################
 #################################
