@@ -25,7 +25,7 @@ use Data::Dumper;
 my @ifield = qw(name hr ohr pto lpto hsa def loan);
 
 my ($file) = @ARGV;
-die "ARG1 file" if (!defined $file);
+die "ARG1 payroll input file" if (!defined $file);
 
 my $pr = $file; $pr =~ s/\..*//;
 my %annual;
@@ -89,11 +89,4 @@ sub save
   my $y = $time[5]+1900; my $m = $time[4]+1;
   my $time = $y.'_'.$m."_$time[3]_$time[2]_$time[1]";
   open(my $Sfh, '>', "$time.txt");
-}
-#get('hr');
-sub get
-{
-  my $v = shift;
-  print "$v\n";
-  print "$_: $annual{$pr}{$_}{$v}\n" for keys %{$annual{$pr}};
 }
