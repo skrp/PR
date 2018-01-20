@@ -4,24 +4,6 @@ use Data::Dumper;
 # REPORT - all in one payroll machine
 # output ytd information
 
-# INPUT STRUCT ################################
-# payroll_name = filename
-# employee hrs ohrs pto lpto loan hsa deff
-
-# PDF OUTPUT ##################################
-# payroll-stubbs
-# payroll-reports
-# tax-quarterlies
-# accountant-entries
-
-# INTERNAL STRUCT #############################
-# hash-of-hashes
-# $obj = employee or array
-# %2018{Jan_19}{$obj}{$slot}
-
-# ADD EMPLOYEE ################################
-# append the MASTER.txt with all data of new employee
-
 my ($item) = @ARGV;
 die "ARG1 item" if (!defined $item);
 
@@ -53,11 +35,7 @@ for (@ytd)
   fill(\@yfield, \@data);
 }
 ###############################################
-###############################################
-###############################################
-#print Dumper(%annual);
 get($item);
-###############################################
 ###############################################
 sub fill
 {
