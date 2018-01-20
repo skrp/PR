@@ -94,14 +94,16 @@ for (@ytd)
   $annual{$pr}{$data[0]}{$yfield[12]} = $data[12]; # t_dent
   $annual{$pr}{$data[0]}{$yfield[13]} = $data[13]; # t_loan
 }
-
-# SAVE YTD ####################################
-my @time = localtime(time);
-my $y = $time[5]+1900; my $m = $time[4]+1;
-my $time = $y.'_'.$m."_$time[3]_$time[2]_$time[1]";
-open(my $Sfh, '>', "$time.txt");
-
-print "$time\n";
+###############################################
+###############################################
+###############################################
 print Dumper(%annual);
 ###############################################
 ###############################################
+sub save
+{
+  my @time = localtime(time);
+  my $y = $time[5]+1900; my $m = $time[4]+1;
+  my $time = $y.'_'.$m."_$time[3]_$time[2]_$time[1]";
+  open(my $Sfh, '>', "$time.txt");
+}
