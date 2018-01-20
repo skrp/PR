@@ -52,7 +52,6 @@ for (@master)
   my @data = split / /, $_;
   fill(\@mfield, \@data);
 }
-
 # YTD #########################################
 my @yfield = qw(name t_gross t_net t_hr t_ohr t_fit t_sit t_ss t_med t_admed t_deff t_med t_dent t_loan);
 open(my $Yfh, '<', '2018.txt');
@@ -68,7 +67,7 @@ for (@ytd)
 ###############################################
 ###############################################
 ###############################################
-print Dumper(%annual);
+#print Dumper(%annual);
 ###############################################
 ###############################################
 sub fill
@@ -90,4 +89,11 @@ sub save
   my $y = $time[5]+1900; my $m = $time[4]+1;
   my $time = $y.'_'.$m."_$time[3]_$time[2]_$time[1]";
   open(my $Sfh, '>', "$time.txt");
+}
+#get('hr');
+sub get
+{
+  my $v = shift;
+  print "$v\n";
+  print "$_: $annual{$pr}{$_}{$v}\n" for keys %{$annual{$pr}};
 }
