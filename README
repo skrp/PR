@@ -16,4 +16,8 @@ REPORT - report ytd or specific pay-period
 MASTER - employee information
 JAN19 - payroll data
 2018 - ytd data
+MarriedFWH - tax calc
+SingleFWH - tax calc
+MarriedSWH - tax calc
+SingleSWH - tax calc
 #################################
