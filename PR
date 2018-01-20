@@ -77,7 +77,12 @@ calc($annual{$pr}{$_}{'gross'}, $annual{$pr}{$_}{'x'}, $annual{$pr}{$_}{'m'}) fo
 
 $annual{$pr}{$_}{'ss'} = $annual{$pr}{$_}{'gross'}*.062 for (keys %{$annual{$pr}});
 $annual{$pr}{$_}{'med'} = $annual{$pr}{$_}{'gross'}*.012 for (keys %{$annual{$pr}});
-$annual{$pr}{$_}{'admed'} = $annual{$pr}{$_}{'gross'}*.009 if ($annual{'ytd'}{$_}{'t_gross'} > 250_000) for (keys %{$annual{$pr}});
+
+
+ for (keys %{$annual{$pr}})
+ {
+   $annual{$pr}{$_}{'admed'} = $annual{$pr}{$_}{'gross'}*.009 if ($annual{'ytd'}{$_}{'t_gross'} > 250_000);
+ }
 
 $annual{$pr}{$_}{'net'} = $annual{$pr}{$_}{'gross'}
 - $annual{$pr}{$_}{'fit'}
@@ -127,93 +132,103 @@ sub get
 }
 sub calc
 {
-  my ($salary, $exception, $type) = @_;
+  my ($ssalary, $exception, $type) = @_;
   my $f_tax; my $s_tax;
-  if ($type eq "0") {
-       $annual{$pr}{$_}{'fit'} = single_fwh($exception, $salary);
-       $annual{$pr}{$_}{'sit'} = single_swh($exception, $salary);
+  if ($type eq "0")
+  {
+       $annual{$pr}{$_}{'fit'} = single_fwh($exception, $ssalary);
+       $annual{$pr}{$_}{'sit'} = single_swh($exception, $ssalary);
   }
-  elsif ($type eq "1") {
-       $annual{$pr}{$_}{'fit'} = married_fwh($exception, $salary);
-       $annual{$pr}{$_}{'sit'} = married_swh($exception, $salary);
+  elsif ($type eq "1")
+  {
+       $annual{$pr}{$_}{'fit'} = married_fwh($exception, $ssalary);
+       $annual{$pr}{$_}{'sit'} = married_swh($exception, $ssalary);
   }
-
+}
 sub single_fwh
 {
-  my $xcept = shift @_; $xcept+=2;
-  my $gross = shift @_;
+  my $xcept = shift; $xcept+=2;
+  my $ssalary = shift;
   my $Fed_table = "SingleFWH.txt";
   open(my $ffp, '<', $Fed_table) or die "can't open SingleFWH.txt";
   my @Single;
-  while (my $line = readline $ffp) {
+  while (my $line = readline $ffp)
+  {
       my @tmp = split ' ', $line;
       foreach my $item (@tmp)
           { $item =~ s/,//; }
       push @Single, [ @tmp ];
   }
   my $i = 0;
-  foreach (@Single) {
-      if (($salary > $Single[$i][0]) and ($salary < $Single[$i][1]))
+  foreach (@Single)
+  {
+      if (($ssalary > $Single[$i][0]) and ($ssalary < $Single[$i][1]))
           { return $Single[$i][$xcept]; }
       else { $i++; next; }
   }
 }
 sub single_swh
 {
-  my $xcept = shift @_; $xcept+=2; # adjust $xcept for table format
-  my $gross = shift @_;
+  my $xcept = shift; $xcept+=2; # adjust $xcept for table format
+  my $ssalary = shift;
   my $State_table = "SingleSWH.txt";
   open(my $sfp, '<', $State_table) or die "can't open SingleSWH.txt";
   my @State;
-  while (my $line = readline $sfp) {
+  while (my $line = readline $sfp)
+  {
       my @tmp = split ' ', $line;
       foreach my $item (@tmp)
           { $item =~ s/,//; }
       push @State, [ @tmp ];
   }
   my $i = 0;
-  foreach (@State) {
-      if (($salary > $State[$i][0]) and ($salary < $State[$i][1]))
+  foreach (@State)
+  {
+      if (($ssalary > $State[$i][0]) and ($ssalary < $State[$i][1]))
           { return $State[$i][$xcept]; }
       else { $i++; next; }
   }
 }
 sub married_fwh
 {
-  my $xcept = shift @_; $xcept+=2; # adjust $xcept for table format
-  my $gross = shift @_;
+  my $xcept = shift; $xcept+=2; # adjust $xcept for table format
+  my $ssalary = shift;
   my $Fed_table = "MarriedFWH.txt";
   open(my $ffp, '<', $Fed_table) or die "can't open MarriedFWH.txt";
   my @Fed;
-  while (my $line = readline $ffp) {
+  while (my $line = readline $ffp)
+  {
       my @tmp = split ' ', $line;
       foreach my $item (@tmp)
           { $item =~ s/,//; }
       push @Fed, [ @tmp ];
   }
   my $i = 0;
-  foreach (@Fed) {
-      if (($salary > $Fed[$i][0]) and ($salary < $Fed[$i][1]))
+  foreach (@Fed)
+  {
+      if (($ssalary > $Fed[$i][0]) and ($ssalary < $Fed[$i][1]))
           { return $Fed[$i][$xcept]; }
       else { $i++; next; }
   }
 }
 sub married_swh
 {
-  my $xcept = shift @_; $xcept+=2; # adjust $xcept for table format
-  my $gross = shift @_;
+  my $xcept = shift; $xcept+=2; # adjust $xcept for table format
+  my $ssalary = shift;
   my $State_table = "MarriedSWH.txt";
   open(my $mfp, '<', $State_table) or die "can't open MarriedSWH.txt";
   my @State;
-  while (my $line = readline $mfp) {
+  while (my $line = readline $mfp)
+  {
       my @tmp = split ' ', $line;
       foreach my $item (@tmp)
           { $item =~ s/,//; }
       push @State, [ @tmp ];
   }
   my $i = 0;
-  foreach (@State) {
-      if (($salary > $State[$i][0]) and ($salary < $State[$i][1]))
+  foreach (@State)
+  {
+      if (($ssalary > $State[$i][0]) and ($ssalary < $State[$i][1]))
           { return $State[$i][$xcept]; }
       else { $i++; next; }
   }
