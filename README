@@ -1,0 +1,19 @@
+#################################
+# PR - all in one payroll machine
+# DESC ##########################
+This machine will:
+  process payroll
+  calculate tax
+  retain ytd data
+  produce payroll stubbs as encrypted pdfs
+  email pdfs
+  produce accountant journal entries
+  produce tax reports
+  produce custom reports
+# FILES #########################
+PR - core payroll processor
+MASTER - employee information
+JAN19 - payroll data
+2018 - ytd data
+#################################
+#################################
