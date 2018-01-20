@@ -53,7 +53,7 @@ for (@master)
   fill(\@mfield, \@data);
 }
 # YTD #########################################
-my @yfield = qw(name t_gross t_net t_hr t_ohr t_fit t_sit t_ss t_med t_admed t_def t_hel t_dent t_hsa t_loan);
+my @yfield = qw(name t_gross t_net t_hr t_ohr t_pto t_other t_fit t_sit t_ss t_med t_admed t_def t_hel t_dent t_hsa t_loan);
 open(my $Yfh, '<', '2018.txt');
 # year totals
 my @ytd = readline $Yfh;
@@ -81,7 +81,7 @@ $annual{$pr}{$_}{'med'} = $annual{$pr}{$_}{'gross'}*.012 for (keys %{$annual{$pr
 
  for (keys %{$annual{$pr}})
  {
-   $annual{$pr}{$_}{'admed'} = $annual{$pr}{$_}{'gross'}*.009 if ($annual{'ytd'}{$_}{'t_gross'} > 250_000);
+   $annual{$pr}{$_}{'admed'} = $annual{$pr}{$_}{'gross'}*.009 if ($annual{$pr}{$_}{'t_gross'} > 250_000);
  }
 
 $annual{$pr}{$_}{'net'} = $annual{$pr}{$_}{'gross'}
